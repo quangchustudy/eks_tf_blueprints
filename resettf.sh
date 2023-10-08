@@ -8,4 +8,4 @@ for file in $(find ../ -type f -name "terraform.tfstate" -o -name "terraform.tfs
     rm -v "$file"
 done
 
-aws secretsmanager delete-secret --secret-id argocd-admin-secret.eks-blueprint --force-delete-without-recovery --region ap-southeast-1
+# aws secretsmanager delete-secret --secret-id argocd-admin-secret.eks-blueprint --force-delete-without-recovery --region ap-southeast-1
