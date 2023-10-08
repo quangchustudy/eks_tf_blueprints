@@ -4,9 +4,9 @@
 ## 1. Create our TF project
 ```bash
 mkdir -p ./environment/eks-blueprint/environment
-cd ./environment/eks-blueprint/environment
+#cd ./environment/eks-blueprint/environment
 ```
-
+First, we create a file called versions.tf that indicates which versions of Terraform and providers our project will use:
 ```bash
 cat > ./environment/eks-blueprint/environment/versions.tf << 'EOF'
 terraform {
@@ -27,6 +27,12 @@ EOF
 ```
 
 ### 2. Define our project's var
+Our environment's Terraform stack will have some variables so we can configure it:
+
+1. Environment name.
+2. The AWS region to use.
+3. The VPC cidr we want to create.
+4. A suffix that will be used to create a secret for ArgoCD later.
 ```bash
 cat > ./environment/eks-blueprint/environment/variables.tf << 'EOF'
 variable "environment_name" {
