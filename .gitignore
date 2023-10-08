@@ -3,6 +3,7 @@
 ./environment/.terraform/*
 environment/.terraform/*
 /environment/.terraform/*
+environment/eks-blueprint/environment/.terraform.lock.hcl
 
 # .tfstate files
 *.tfstate
