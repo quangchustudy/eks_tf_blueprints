@@ -63,3 +63,22 @@ module "eks_cluster" {
 
 }
 
+# module "eks_teams" {
+#   source = "../modules/eks_teams"
+
+#   aws_region      = var.aws_region
+#   service_name    = "blue"
+#   cluster_version = "1.25"
+
+#   environment_name       = var.environment_name
+#   eks_admin_role_name    = var.eks_admin_role_name
+
+#   argocd_secret_manager_name_suffix = var.argocd_secret_manager_name_suffix
+
+#   #addons_repo_url = var.addons_repo_url 
+
+#   #workload_repo_url      = var.workload_repo_url
+#   #workload_repo_revision = var.workload_repo_revision
+#   #workload_repo_path     = var.workload_repo_path
+
+# }

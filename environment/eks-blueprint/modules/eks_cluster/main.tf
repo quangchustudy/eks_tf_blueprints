@@ -110,7 +110,7 @@ module "eks" {
 }
 
 
-#ADD PLATFORM TEAM
+# ADD PLATFORM TEAM
 data "aws_iam_role" "eks_admin_role_name" {
   count     = local.eks_admin_role_name != "" ? 1 : 0
   name = local.eks_admin_role_name
@@ -208,20 +208,27 @@ module "eks_blueprints_dev_teams" {
     }
   }
   name = "team-${each.key}"
-
+  
+  #define users who can manage this cluster with appropriate permissions
   users             = [data.aws_caller_identity.current.arn]
   cluster_arn       = module.eks.cluster_arn
   oidc_provider_arn = module.eks.oidc_provider_arn
 
   labels = merge(
     {
-      team = each.key
+      team = each.key #terraform state show 'module.eks_cluster.module.eks_blueprints_dev_teams["riker"].kubernetes_namespace_v1.this["team-riker"]'
+      # labels           = {
+      #       "appName"                                 = "riker-team-app"
+      #       "elbv2.k8s.aws/pod-readiness-gate-inject" = "enabled"
+      #       "projectName"                             = "project-riker"
+      #       "team"                                    = "riker"
+      #   }
     },
     try(each.value.labels, {})
   )
 
   annotations = {
-    team = each.key
+    team = each.key #"team"="riker"
   }
 
   namespaces = {
