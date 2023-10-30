@@ -283,3 +283,61 @@ module "eks_blueprints_dev_teams" {
 
 }
 
+#ADD THE EKS BLUEPRINT ADDONS TERRAFORM MODULE 
+module "kubernetes_addons" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=blueprints-workshops/modules/kubernetes-addons"
+
+  eks_cluster_id     = module.eks.cluster_name
+
+  #---------------------------------------------------------------
+  # ARGO CD ADD-ON
+  #---------------------------------------------------------------
+
+  enable_argocd         = true
+  argocd_manage_add_ons = true # Indicates that ArgoCD is responsible for managing/deploying Add-ons.
+
+
+  #---------------------------
+  # ARGO CD WORKLOAD
+  #-------------------------
+  argocd_applications = {
+    addons    = local.addons_application
+    workloads = local.workload_application #this line for workload
+  }
+
+  argocd_helm_config = {
+    set_sensitive = [
+      {
+        name  = "configs.secret.argocdServerAdminPassword"
+        value = bcrypt(data.aws_secretsmanager_secret_version.admin_password_version.secret_string)
+      }
+    ]    
+    set = [
+      {
+        name  = "server.service.type"
+        value = "LoadBalancer"
+      }
+    ]
+  }
+
+  #---------------------------------------------------------------
+  # EKS Managed AddOns
+  # https://aws-ia.github.io/terraform-aws-eks-blueprints/add-ons/
+  #---------------------------------------------------------------
+
+  enable_amazon_eks_coredns = true
+  enable_amazon_eks_kube_proxy = true
+  enable_amazon_eks_vpc_cni = true      
+  enable_amazon_eks_aws_ebs_csi_driver = true
+
+  #---------------------------------------------------------------
+  # ADD-ONS - You can add additional addons here
+  # https://aws-ia.github.io/terraform-aws-eks-blueprints/add-ons/
+  #---------------------------------------------------------------
+
+
+  enable_aws_load_balancer_controller  = true
+  enable_aws_for_fluentbit             = true
+  enable_metrics_server                = true
+
+}
